@@ -3,291 +3,606 @@
 ## Navigation
 
 ### Basic Movement
-- `h` - Move left
-- `j` - Move down
-- `k` - Move up
-- `l` - Move right
-- `w` - Jump to beginning of next word
-- `b` - Jump to beginning of previous word
-- `e` - Jump to end of current/next word
-- `ge` - Jump to end of previous word
-- `0` - Jump to beginning of line
+- `h` - Move cursor left
+- `j` - Move cursor down
+- `k` - Move cursor up
+- `l` - Move cursor right
+- `w` - Jump forward to start of next word
+- `W` - Jump forward to start of next WORD (space-delimited)
+- `b` - Jump backward to start of previous word
+- `B` - Jump backward to start of previous WORD (space-delimited)
+- `e` - Jump forward to end of current/next word
+- `E` - Jump forward to end of current/next WORD
+- `ge` - Jump backward to end of previous word
+- `gE` - Jump backward to end of previous WORD
+- `0` - Jump to beginning of line (column 0)
 - `^` - Jump to first non-blank character of line
 - `$` - Jump to end of line
-- `gg` - Jump to beginning of file
-- `G` - Jump to end of file
-- `:10` - Jump to line 10
-- `10G` - Jump to line 10
+- `gg` - Jump to first line of file
+- `G` - Jump to last line of file
+- `:10` - Jump directly to line 10
+- `10G` - Jump directly to line 10
+- `{count}j` - Move down count lines (e.g. 5j)
+- `{count}k` - Move up count lines (e.g. 5k)
 
-### Page Movement
-- `Ctrl + d` - Move down half a page
-- `Ctrl + u` - Move up half a page
-- `Ctrl + f` - Move down one page
-- `Ctrl + b` - Move up one page
-- `Ctrl + e` - Scroll down one line
-- `Ctrl + y` - Scroll up one line
+### In-Line Character Search
+- `f{char}` - Find and jump forward to {char} on current line
+- `F{char}` - Find and jump backward to {char} on current line
+- `t{char}` - Jump forward until just before {char} on current line
+- `T{char}` - Jump backward until just after {char} on current line
+- `;` - Repeat last f/F/t/T search in same direction
+- `,` - Repeat last f/F/t/T search in opposite direction
+
+### Page and Screen Movement
+- `Ctrl + d` - Scroll down half a page and center cursor
+- `Ctrl + u` - Scroll up half a page and center cursor
+- `Ctrl + f` - Scroll forward one full page
+- `Ctrl + b` - Scroll backward one full page
+- `Ctrl + e` - Scroll screen down one line (without moving cursor)
+- `Ctrl + y` - Scroll screen up one line (without moving cursor)
+- `H` - Jump cursor to High (top line of screen)
+- `M` - Jump cursor to Middle line of screen
+- `L` - Jump cursor to Low (bottom line of screen)
+- `zz` - Center screen view around cursor line
+- `zt` - Scroll screen so cursor line is at top
+- `zb` - Scroll screen so cursor line is at bottom
 
 ### Search and Jump
 - `/text` - Search forward for "text"
 - `?text` - Search backward for "text"
-- `n` - Jump to next search result
-- `N` - Jump to previous search result
-- `*` - Search forward for word under cursor
-- `#` - Search backward for word under cursor
-- `:noh` - Clear search highlighting
+- `n` - Jump to next search match
+- `N` - Jump to previous search match
+- `*` - Search forward for exact word under cursor
+- `#` - Search backward for exact word under cursor
+- `g*` - Search forward for partial word under cursor
+- `g#` - Search backward for partial word under cursor
+- `:noh` - Clear search highlight (or press Esc in normal mode)
+- `%` - Jump between matching brackets: (), {}, []
+- `Ctrl + o` - Jump backward to previous location in jump list
+- `Ctrl + i` - Jump forward to next location in jump list
+- `:jumps` - Display jump list history
 
 ### Sentence and Paragraph Movement
-- `)` - Jump to next sentence
-- `(` - Jump to previous sentence
-- `}` - Jump to next paragraph
-- `{` - Jump to previous paragraph
+- `)` - Jump to start of next sentence
+- `(` - Jump to start of previous sentence
+- `}` - Jump to start of next paragraph or block
+- `{` - Jump to start of previous paragraph or block
+- `]]` - Jump to start of next section or function
+- `[[` - Jump to start of previous section or function
 
-## Editing
+## Editing and Operators
 
 ### Insert Mode
 - `i` - Enter insert mode before cursor
 - `a` - Enter insert mode after cursor
-- `I` - Enter insert mode at beginning of line
+- `I` - Enter insert mode at first non-blank character of line
 - `A` - Enter insert mode at end of line
-- `o` - Open new line below and enter insert mode
-- `O` - Open new line above and enter insert mode
-- `Esc` - Exit insert mode
+- `o` - Open new line below cursor and enter insert mode
+- `O` - Open new line above cursor and enter insert mode
+- `Esc` - Exit insert mode back to normal mode
+- `Ctrl + c` - Exit insert mode back to normal mode
+- `Ctrl + w` - Delete previous word while in insert mode
+- `Ctrl + u` - Delete from cursor to start of line in insert mode
+- `Ctrl + r "` - Paste contents of default register in insert mode
+- `Ctrl + r +` - Paste contents of system clipboard in insert mode
+- `Ctrl + r =` - Evaluate calculator expression in insert mode (e.g. 15*8)
 
 ### Delete Commands
 - `x` - Delete character under cursor
 - `X` - Delete character before cursor
-- `dw` - Delete word from cursor
-- `db` - Delete word before cursor
-- `dd` - Delete entire line
+- `dw` - Delete word from cursor to beginning of next word
+- `diw` - Delete inner word under cursor
+- `daw` - Delete word under cursor including trailing space
+- `db` - Delete word backward from cursor
+- `dd` - Delete entire current line
 - `D` - Delete from cursor to end of line
 - `d$` - Delete from cursor to end of line
 - `d0` - Delete from cursor to beginning of line
 - `dgg` - Delete from cursor to beginning of file
 - `dG` - Delete from cursor to end of file
+- `d%` - Delete from cursor to matching bracket
+- `"_d` - Delete into black hole register (does not overwrite clipboard)
+- `"_dd` - Delete line into black hole register (preserves clipboard)
 
 ### Change Commands
-- `cw` - Change word from cursor
-- `cb` - Change word before cursor
-- `cc` - Change entire line
+- `cw` - Change word from cursor to end of word
+- `ciw` - Change inner word under cursor
+- `caw` - Change word under cursor including space
+- `cb` - Change word backward from cursor
+- `cc` - Change entire current line
 - `C` - Change from cursor to end of line
-- `r` - Replace single character
-- `R` - Enter replace mode
+- `c$` - Change from cursor to end of line
+- `c0` - Change from cursor to beginning of line
+- `s` - Substitute single character under cursor (delete and insert)
+- `S` - Substitute entire current line (delete line and insert)
+- `r{char}` - Replace character under cursor with {char}
+- `R` - Enter replace mode (overwrite text)
 
 ### Copy and Paste
-- `y` - Yank (copy) in visual mode
-- `yy` - Yank entire line
-- `Y` - Yank entire line
-- `yiw` - Yank word under cursor
-- `yaw` - Yank word under cursor including trailing space
+- `y` - Yank (copy) selected text in visual mode
+- `yy` - Yank entire current line
+- `Y` - Yank entire current line
+- `yiw` - Yank inner word under cursor
+- `yaw` - Yank word under cursor including space
 - `y$` - Yank from cursor to end of line
-- `y0` - Yank from cursor to beginning of line
-- `p` - Paste after cursor
-- `P` - Paste before cursor
-- `"ayy` - Yank line to register 'a'
-- `"ap` - Paste from register 'a'
+- `y0` - Yank from cursor to start of line
+- `p` - Paste after cursor or below current line
+- `P` - Paste before cursor or above current line
+- `"0p` - Paste last yanked text (ignores recent deletes)
+- `"+yy` - Yank current line to system clipboard
+- `"+p` - Paste from system clipboard after cursor
+- `"+P` - Paste from system clipboard before cursor
+- `"ayy` - Yank current line into named register 'a'
+- `"ap` - Paste from named register 'a'
 
-### Undo and Redo
-- `u` - Undo
-- `Ctrl + r` - Redo
-- `U` - Undo all changes on current line
+### Undo, Redo, and Repeat
+- `u` - Undo last change
+- `Ctrl + r` - Redo last undone change
+- `U` - Undo all latest changes on current line
+- `.` - Repeat last edit command (dot command)
+- `Ctrl + a` - Increment number under cursor
+- `Ctrl + x` - Decrement number under cursor
+
+### Case Conversion and Indentation
+- `~` - Toggle case of character under cursor
+- `gU{motion}` - Make text uppercase across motion (e.g. gUiw)
+- `gu{motion}` - Make text lowercase across motion (e.g. guiw)
+- `gUU` - Make entire current line uppercase
+- `guu` - Make entire current line lowercase
+- `>>` - Indent current line right
+- `<<` - Unindent current line left
+- `==` - Auto-indent current line based on syntax
+- `=G` - Auto-indent from current line to end of file
+- `gg=G` - Auto-indent entire file
+- `J` - Join current line with line below with space
+- `gJ` - Join current line with line below without space
+
+## Text Objects
+
+### Word and String Objects
+- `iw` - Inner word (excluding surrounding whitespace)
+- `aw` - A word (including surrounding whitespace)
+- `iW` - Inner WORD (space-separated chunk)
+- `aW` - A WORD (including surrounding whitespace)
+- `i"` - Inner double quotes (contents only)
+- `a"` - Around double quotes (including the quotes)
+- `i'` - Inner single quotes (contents only)
+- `a'` - Around single quotes (including the quotes)
+- `i\`` - Inner backticks (contents only)
+- `a\`` - Around backticks (including the backticks)
+
+### Block and Tag Objects
+- `i(` - Inner parentheses (contents inside ())
+- `a(` - Around parentheses (including ())
+- `ib` - Inner block (same as i()
+- `ab` - Around block (same as a()
+- `i[` - Inner square brackets (contents inside [])
+- `a[` - Around square brackets (including [])
+- `i{` - Inner curly braces (contents inside {})
+- `a{` - Around curly braces (including {})
+- `iB` - Inner curly block (same as i{)
+- `aB` - Around curly block (same as a{)
+- `it` - Inner HTML/XML tag (contents inside <tag>...</tag>)
+- `at` - Around HTML/XML tag (including <tag>...</tag>)
+- `ip` - Inner paragraph
+- `ap` - Around paragraph
 
 ## Visual Mode
 
 ### Visual Selection
-- `v` - Enter visual mode
-- `V` - Enter visual line mode
-- `Ctrl + v` - Enter visual block mode
+- `v` - Enter character-wise visual mode
+- `V` - Enter line-wise visual mode
+- `Ctrl + v` - Enter column block-wise visual mode
+- `gv` - Reselect last visual selection
+- `o` - Switch cursor to other end of visual selection
 - `Esc` - Exit visual mode
+- `<leader>va` - Select entire file (`gg0vG$`)
 
-### Visual Commands
-- `y` - Yank selected text
+### Visual Operations
+- `y` - Yank (copy) selected text
 - `d` - Delete selected text
-- `c` - Change selected text
-- `>` - Indent selected text
-- `<` - Unindent selected text
-- `*` - Search for selected text
+- `c` - Change selected text (delete and enter insert mode)
+- `>` - Indent selected lines right (keep in visual mode with gv)
+- `<` - Unindent selected lines left
+- `=` - Auto-indent selected lines
+- `*` - Search forward for selected text
+- `~` - Toggle case of selected text
+- `u` - Make selected text lowercase
+- `U` - Make selected text uppercase
+- `I` - Insert text across all selected lines in block visual mode
+- `A` - Append text across all selected lines in block visual mode
 
-## Window Management
+## Window and Split Management
 
-### Window Navigation
-- `Ctrl + h` - Move to left window
-- `Ctrl + l` - Move to right window
-- `Ctrl + j` - Move to lower window
-- `Ctrl + k` - Move to upper window
-- `Ctrl + w` then `h` - Move to left window
-- `Ctrl + w` then `l` - Move to right window
-- `Ctrl + w` then `j` - Move to lower window
-- `Ctrl + w` then `k` - Move to upper window
+### Tmux and Window Navigation
+- `Ctrl + h` - Navigate to left window or tmux pane
+- `Ctrl + j` - Navigate to lower window or tmux pane
+- `Ctrl + k` - Navigate to upper window or tmux pane
+- `Ctrl + l` - Navigate to right window or tmux pane
+- `Ctrl + \` - Navigate to previous window or tmux pane
+- `Ctrl + w w` - Cycle to next open window
+- `Ctrl + w p` - Jump to previous active window
 
-### Window Operations
+### Split Creation and Closing
 - `:sp` - Split window horizontally
 - `:vsp` - Split window vertically
-- `Ctrl + w` then `=` - Equalize window sizes
-- `Ctrl + w` then `c` - Close current window
-- `Ctrl + w` then `o` - Close other windows
-- `Ctrl + w` then `_` - Maximize current window
-- `Ctrl + w` then `r` - Rotate windows
+- `:sp {file}` - Open {file} in horizontal split
+- `:vsp {file}` - Open {file} in vertical split
+- `Ctrl + w s` - Split window horizontally
+- `Ctrl + w v` - Split window vertically
+- `Ctrl + w q` - Quit and close current window
+- `Ctrl + w c` - Close current window
+- `Ctrl + w o` - Close all other windows except current
+
+### Split Resizing and Layout
+- `Ctrl + w =` - Equalize width and height of all windows
+- `Ctrl + w _` - Maximize height of current window
+- `Ctrl + w |` - Maximize width of current window
+- `Ctrl + w +` - Increase height of current window
+- `Ctrl + w -` - Decrease height of current window
+- `Ctrl + w >` - Increase width of current window
+- `Ctrl + w <` - Decrease width of current window
+- `Ctrl + w r` - Rotate windows downward/rightward
+- `Ctrl + w R` - Rotate windows upward/leftward
+- `Ctrl + w H` - Move current window to far left
+- `Ctrl + w L` - Move current window to far right
+- `Ctrl + w J` - Move current window to bottom
+- `Ctrl + w K` - Move current window to top
+
+## Tab Management
+
+### Tab Operations
+- `:tabnew` - Open a new empty tab page
+- `:tabnew {file}` - Open {file} in a new tab page
+- `:tabclose` - Close current tab page
+- `:tabonly` - Close all other tabs except current
+- `:tabn` - Go to next tab page
+- `gt` - Go to next tab page
+- `:tabp` - Go to previous tab page
+- `gT` - Go to previous tab page
+- `{count}gt` - Jump directly to tab number {count}
+- `:tabm {n}` - Move current tab to position {n}
 
 ## Buffer Management
 
 ### Buffer Navigation
-- `:bn` - Next buffer
-- `:bp` - Previous buffer
-- `:b#` - Switch to last buffer
-- `:b1` - Switch to buffer 1
-- `:ls` - List all buffers
-- `:bd` - Delete current buffer
-- `:bd!` - Force delete current buffer
+- `:bn` - Switch to next buffer in list
+- `:bp` - Switch to previous buffer in list
+- `:b#` - Switch to alternate (last active) buffer
+- `<leader><Tab>` - Quick switch back to last active buffer
+- `:b {name}` - Switch to buffer matching filename {name}
+- `:b {num}` - Switch to buffer number {num}
+- `:ls` - List all active buffers with numbers and status
+- `<leader><leader>` - Fuzzy search and switch open buffers (Telescope)
 
 ### Buffer Operations
-- `:e filename` - Edit file
-- `:w` - Write (save) file
-- `:w filename` - Write to filename
-- `:q` - Quit
-- `:q!` - Quit without saving
-- `:wq` - Write and quit
-- `:x` - Write and quit (only if changed)
-
-## File Operations
-
-### File Navigation
-- `:pwd` - Print working directory
-- `:cd path` - Change directory
-- `:Ex` - Open file explorer
-- `:Sex` - Open file explorer in split
-- `:Vex` - Open file explorer in vertical split
-
-### File Search
-- `:find filename` - Find file in path
-- `:sfind filename` - Find file in split
-- `:tabfind filename` - Find file in new tab
+- `:bd` - Delete (close) current buffer
+- `:bd!` - Force delete current buffer without saving
+- `:bd {num}` - Delete buffer number {num}
+- `<leader>bd` - Delete all other buffers except current (`%bd|e#`)
+- `:e {file}` - Open and edit file in current buffer
+- `:e!` - Reload current file from disk (discard changes)
+- `:w` - Save current buffer to disk
+- `:w!` - Force save current buffer
+- `:w {file}` - Save current buffer to new filename
+- `:q` - Quit current window
+- `:q!` - Quit without saving changes
+- `:wq` - Save and quit
+- `:x` - Save only if modified and quit
+- `:qa` - Quit all open windows and buffers
+- `:qa!` - Force quit all without saving
+- `:wqa` - Save all open buffers and quit
 
 ## Search and Replace
 
-### Search
-- `/pattern` - Search forward for pattern
-- `?pattern` - Search backward for pattern
-- `n` - Next search result
-- `N` - Previous search result
-- `*` - Search for word under cursor
-- `#` - Search backward for word under cursor
+### Pattern Search
+- `/pattern` - Search forward for regex pattern
+- `?pattern` - Search backward for regex pattern
+- `n` - Move to next match
+- `N` - Move to previous match
+- `:noh` - Clear search highlight
+- `q/` - Open search history in editable command-line window
+- `q:` - Open Ex command history in editable window
 
-### Replace
-- `:s/old/new` - Substitute first occurrence on current line
+### Substitution
+- `:s/old/new` - Substitute first occurrence of old with new on current line
 - `:s/old/new/g` - Substitute all occurrences on current line
-- `:%s/old/new/g` - Substitute all occurrences in file
-- `:%s/old/new/gc` - Substitute with confirmation
-- `:%s/old/new/gn` - Show count of matches without substituting
+- `:%s/old/new/g` - Substitute all occurrences in entire file
+- `:%s/old/new/gc` - Substitute all occurrences with interactive confirmation
+- `:%s/old/new/gn` - Count occurrences of pattern without replacing
+- `:'<,'>s/old/new/g` - Substitute across visually selected lines
+- `:%s/\<old\>/new/g` - Substitute only exact whole word matches
 
 ## Marks and Registers
 
 ### Marks
-- `ma` - Set mark 'a' at current position
-- `'a` - Jump to mark 'a'
-- `:marks` - Show all marks
+- `ma` - Set local mark 'a' at current position
+- `mA` - Set global mark 'A' (persists across files)
+- `'a` - Jump to line of mark 'a'
+- `` `a `` - Jump to exact line and column of mark 'a'
+- `''` - Jump back to line before last jump
+- `` `` `` - Jump back to exact position before last jump
+- `'.` - Jump to line of last change in file
+- `gi` - Jump to position of last insert mode exit and enter insert
+- `:marks` - List all current marks
 - `:delmarks a` - Delete mark 'a'
-- `:delmarks!` - Delete all marks
+- `:delmarks!` - Delete all lowercase marks
 
 ### Registers
-- `:reg` - Show all registers
-- `"ayy` - Yank to register 'a'
-- `"ap` - Paste from register 'a'
-- `"+yy` - Yank to system clipboard
-- `"+p` - Paste from system clipboard
+- `:reg` - Display contents of all registers
+- `"+yy` - Yank line into system clipboard register
+- `"+p` - Paste from system clipboard register
+- `"0p` - Paste text from last yank (protected from deletes)
+- `"_dd` - Delete line into blackhole register (preserves clipboard)
+- `"_d{motion}` - Delete text across motion into blackhole register
+- `"ayy` - Yank line into named register 'a'
+- `"ap` - Paste from named register 'a'
+- `"Ayy` - Append line into named register 'a' (capital letter)
 
 ## Macros
 
-### Recording and Playing
-- `qq` - Start recording macro to register 'q'
-- `q` - Stop recording
-- `@q` - Play macro from register 'q'
-- `@@` - Play last used macro
-- `5@q` - Play macro 5 times
-- `:reg q` - Show contents of register 'q'
+### Macro Recording and Playback
+- `qq` - Start recording macro into register 'q'
+- `q` - Stop recording macro
+- `@q` - Execute macro stored in register 'q'
+- `@@` - Repeat last executed macro
+- `5@q` - Execute macro in register 'q' 5 times
+- `:reg q` - Inspect macro instructions inside register 'q'
+- `"qp` - Paste macro as text to edit it
 
-## Folding
+## Code Folding
 
 ### Fold Commands
-- `za` - Toggle fold under cursor
+- `za` - Toggle fold under cursor open or closed
 - `zo` - Open fold under cursor
 - `zc` - Close fold under cursor
-- `zR` - Open all folds
-- `zM` - Close all folds
-- `zj` - Move to next fold
-- `zk` - Move to previous fold
+- `zR` - Open all folds in current buffer
+- `zM` - Close all folds in current buffer
+- `zj` - Move cursor down to next fold
+- `zk` - Move cursor up to previous fold
+- `zd` - Delete fold under cursor
+- `zE` - Delete all folds in buffer
 
-## Terminal
+## Terminal and Floaterm
 
-### Terminal Commands
-- `:term` - Open terminal
-- `:sp | term` - Open terminal in split
+### Builtin Terminal
+- `:term` - Open terminal in current window
+- `:sp | term` - Open terminal in horizontal split
 - `:vsp | term` - Open terminal in vertical split
-- `Ctrl + \` then `n` - Exit terminal mode
-- `i` - Enter terminal mode
-- `Esc` - Exit terminal mode
+- `<leader>tt` - Open terminal in current buffer
+- `<leader>ts` - Open terminal in horizontal split
+- `<leader>tv` - Open terminal in vertical split
+- `Ctrl + \ then n` - Exit terminal mode back to normal mode
+- `i` - Re-enter terminal insert mode from normal mode
 
-## Configuration
+### Floaterm Popup Terminal
+- `<F12>` - Toggle floating terminal window
+- `<F7>` - Create new Floaterm instance
+- `<F8>` - Switch to previous Floaterm instance
+- `<F9>` - Switch to next Floaterm instance
+- `<F5>` - Save and run current Python file in Floaterm
+- `:FloatermNew` - Create new floating terminal
+- `:FloatermToggle` - Toggle floating terminal
+- `:FloatermKill` - Terminate current Floaterm instance
 
-### Reload Configuration
-- `:source ~/.config/nvim/init.lua` - Reload main config
-- `:source ~/.config/nvim/lua/keymaps.lua` - Reload keymaps
-- `<leader>rr` - Reload configuration (if mapped)
+## Telescope (Fuzzy Finder)
 
-### Plugin Management
-- `:Lazy sync` - Sync plugins
-- `:Lazy reload plugin_name` - Reload specific plugin
-- `:Lazy check` - Check for updates
-- `:Lazy install` - Install missing plugins
+### Files and Search
+- `<leader>f` - Fuzzy find files in project (`find_files`)
+- `<leader>sg` - Search project contents by live grep (`live_grep`)
+- `<leader>sw` - Search for word under cursor across project (`grep_string`)
+- `<leader>s/` - Live grep only inside currently open files
+- `<leader>/` - Fuzzy search lines inside current buffer
+- `<leader>sn` - Search Neovim configuration files
+- `<leader>sds` - Search within specific directory prompt
 
-## Telescope Commands
+### Buffers and History
+- `<leader><leader>` - Search and jump to open buffers (`buffers`)
+- `<leader>s.` - Search recent files list (`oldfiles`)
+- `<leader>sr` - Resume last active Telescope search (`resume`)
 
-### File Operations
-- `:Telescope find_files` - Find files
-- `:Telescope live_grep` - Live grep
-- `:Telescope buffers` - List buffers
-- `:Telescope help_tags` - Search help
-- `:Telescope keymaps` - Search keymaps
+### Help and Keymaps
+- `<leader>sh` - Search Neovim help documentation tags (`help_tags`)
+- `<leader>sk` - Search configured keymaps (`keymaps`)
+- `<leader>ss` - Browse all available Telescope builtin pickers
+- `<leader>sd` - Search LSP diagnostics across workspace (`diagnostics`)
 
-### Custom Searches
-- `:Telescope live_grep search_dirs={"path"}` - Search in specific directory
-- `:Telescope live_grep find_command={"rg", "--type", "py"}` - Search only Python files
+### Commands Cheat Sheet
+- `:Commands` - Search commands reference in interactive popup (Telescope)
+- `:CheatSheet` - Search commands reference in interactive popup (Telescope)
+- `<leader>sc` - Search commands reference by keyword in popup
+- `<leader>?` - Search commands reference by keyword in popup
+- `:CommandsDoc` - Open full commands.md in floating popup modal
+- `:CommandsPopup` - Open full commands.md in floating popup modal
+- `<leader>sC` - Open full commands.md in floating popup modal
+- `Ctrl + p` - Switch from search popup to floating doc view
+- `Ctrl + e` - Execute Ex command directly from search popup
+- `Ctrl + y` - Copy highlighted command to clipboard in popup
 
 ## LSP (Language Server Protocol)
 
-### LSP Commands
-- `gd` - Go to definition
-- `gr` - Go to references
-- `gI` - Go to implementation
-- `K` - Hover documentation
-- `<leader>rn` - Rename symbol
-- `<leader>ca` - Code action
-- `<leader>cf` - Format current buffer (Ruff / Biome)
-- `<leader>co` - Organize imports
-- `[d` - Previous diagnostic
-- `]d` - Next diagnostic
+### Code Navigation
+- `gd` - Go to symbol definition (Telescope)
+- `gr` - Go to symbol references across project (Telescope)
+- `gI` - Go to implementation of interface/type (Telescope)
+- `gD` - Go to symbol declaration (header/interface)
+- `<leader>D` - Go to type definition (Telescope)
+- `<leader>ds` - Fuzzy find document symbols in file (Telescope)
+- `<leader>ws` - Fuzzy find workspace symbols across project (Telescope)
+- `Ctrl + t` - Jump backward after jumping to definition
+
+### Code Actions and Refactoring
+- `K` - Display hover documentation popup for symbol
+- `<leader>rn` - Rename symbol across entire project
+- `<leader>ca` - Open LSP code actions popup
+- `<leader>cf` - Format current buffer (Ruff for Python / Biome for JS)
+- `<leader>co` - Organize imports in current file
+
+### Diagnostics
+- `[d` - Jump to previous diagnostic warning/error
+- `]d` - Jump to next diagnostic warning/error
+- `<leader>e` - Open floating window with diagnostic error details
+- `<leader>q` - Populate and open diagnostic quickfix list
+
+## Autocompletion and Snippets (nvim-cmp)
+
+### Completion Controls
+- `Ctrl + Space` - Manually trigger completion menu popup
+- `<Tab>` - Select next completion suggestion
+- `Ctrl + n` - Select next completion suggestion
+- `<S-Tab>` - Select previous completion suggestion
+- `Ctrl + p` - Select previous completion suggestion
+- `<CR>` - Confirm and insert selected completion (auto-imports)
+- `Ctrl + b` - Scroll documentation popup backward
+- `Ctrl + f` - Scroll documentation popup forward
+
+### Snippet Jumps
+- `Ctrl + l` - Jump forward to next snippet placeholder (LuaSnip)
+- `Ctrl + h` - Jump backward to previous snippet placeholder (LuaSnip)
+
+## Debugging (nvim-dap & Python)
+
+### Breakpoints and Execution
+- `<leader>db` - Toggle breakpoint on current line
+- `<leader>dc` - Start debugging or continue to next breakpoint
+- `<leader>do` - Step over current line
+- `<leader>di` - Step into function under cursor
+- `<leader>dO` - Step out of current function
+- `<leader>dq` - Terminate active debugging session
+
+### Debug UI and Test Runners
+- `<leader>du` - Toggle interactive DAP UI panels
+- `<leader>dt` - Debug current test file with pytest in terminal
+- `<leader>dT` - Debug all project tests with pytest in terminal
 
 ## Git Integration
 
-### Git Commands
-- `:G` - Open Git status
-- `:Gdiff` - Show diff
-- `:Gblame` - Show blame
-- `:Glog` - Show log
-- `:Gpush` - Push changes
-- `:Gpull` - Pull changes
+### Gitsigns Hunks
+- `]c` - Jump to next changed git hunk
+- `[c` - Jump to previous changed git hunk
+- `<leader>hs` - Stage git hunk under cursor (normal or visual)
+- `<leader>hr` - Reset (discard) git hunk under cursor (normal or visual)
+- `<leader>hS` - Stage entire buffer changes to git index
+- `<leader>hu` - Undo last staged hunk
+- `<leader>hR` - Reset entire buffer changes
+- `<leader>hp` - Preview diff of git hunk in floating popup
+
+### Git Blame and Diff
+- `<leader>hb` - Show git blame popup for current line
+- `<leader>hd` - Diff current buffer against git index
+- `<leader>hD` - Diff current buffer against last git commit
+- `<leader>tb` - Toggle continuous git blame display on current line
+- `<leader>tD` - Toggle visibility of deleted lines inline
+
+### Fugitive Git Commands
+- `:G` - Open Fugitive interactive git status window
+- `:Gdiff` - Open side-by-side git diff split
+- `:Gblame` - Open git blame column
+- `:Glog` - Load git commit history into quickfix list
+- `:Gpush` - Push current branch to remote
+- `:Gpull` - Pull changes from remote branch
+
+## File Explorer (NvimTree)
+
+### Tree Toggle and Navigation
+- `<leader>pv` - Toggle NvimTree file explorer sidebar
+- `o` - Open file or expand directory in NvimTree
+- `<CR>` - Open file or expand directory in NvimTree
+- `v` - Open selected file in vertical split
+- `s` - Open selected file in horizontal split
+- `R` - Refresh file tree from disk
+- `H` - Toggle visibility of hidden files (dotfiles)
+- `q` - Close NvimTree sidebar
+
+### File Management in Tree
+- `a` - Create new file or folder (end with / for directory)
+- `d` - Delete selected file or folder
+- `r` - Rename selected file or folder
+- `x` - Cut file or folder to clipboard
+- `c` - Copy file or folder to clipboard
+- `p` - Paste copied or cut file into directory
+- `y` - Copy filename to clipboard
+- `Y` - Copy relative path to clipboard
+
+## Surround and Text Editing (mini.nvim)
+
+### Surround Operations
+- `saiw)` - Surround inner word with parentheses ()
+- `saiw"` - Surround inner word with double quotes ""
+- `saiw'` - Surround inner word with single quotes ''
+- `saiw}` - Surround inner word with curly braces {}
+- `saiw]` - Surround inner word with square brackets []
+- `sd'` - Delete surrounding single quotes
+- `sd"` - Delete surrounding double quotes
+- `sd)` - Delete surrounding parentheses
+- `sr)'` - Replace surrounding parentheses with single quotes
+- `sr'"` - Replace surrounding single quotes with double quotes
+- `sa{motion}{char}` - Surround text covered by motion with {char}
+
+### Extended Text Objects
+- `va)` - Visually select around parentheses
+- `yinq` - Yank inside next quote in line
+- `ci'` - Change inside single quotes
+
+## AI Assistant (Avante.nvim)
+
+### Avante AI Commands
+- `<leader>aa` - Open Avante AI sidebar chat prompt
+- `<leader>ae` - Edit selected code block with Avante AI
+- `<leader>ar` - Refresh Avante AI state
+- `<leader>af` - Focus Avante AI sidebar window
+- `<leader>at` - Toggle Avante AI sidebar window
+
+## Markdown and Notes
+
+### Markdown Preview
+- `:MarkdownPreview` - Start live markdown preview in web browser
+- `:MarkdownPreviewStop` - Stop active markdown preview server
+- `:MarkdownPreviewToggle` - Toggle markdown preview server
+
+### Todo Comments
+- `:TodoTelescope` - Search all TODO, FIXME, NOTE, BUG comments in project
+- `:TodoQuickFix` - Populate all project TODO comments in quickfix list
+- `:TodoLocList` - Populate all project TODO comments in location list
+- `]t` - Jump to next TODO comment in file
+- `[t` - Jump to previous TODO comment in file
+
+## Configuration and Package Management
+
+### Config and Custom Keymaps
+- `:source ~/.config/nvim/init.lua` - Reload main Neovim configuration file
+- `<leader>rr` - Reload Neovim configuration (`source init.lua`)
+- `<leader>np` - Create new Python file with automatic folder creation
+- `<leader>va` - Visually select entire file contents
+- `<leader>bd` - Delete all other buffers except active one
+- `<CR>` - Break line after cursor in normal mode
+
+### Lazy and Mason
+- `:Lazy` - Open Lazy plugin manager interface
+- `:Lazy sync` - Sync, install, clean, and update all plugins
+- `:Lazy update` - Update installed plugins
+- `:Lazy check` - Check for available plugin updates
+- `:Lazy clean` - Remove unused plugins
+- `:Mason` - Open Mason manager (LSP servers, DAP adapters, formatters)
+- `:MasonUpdate` - Update Mason package registry
+- `:checkhealth` - Run health checks for Neovim and all plugins
 
 ## Quick Tips
 
 ### Efficiency Tips
-- Use numbers with commands: `5j` (move down 5 lines), `3dd` (delete 3 lines)
-- Combine commands: `dap` (delete around paragraph)
-- Use text objects: `ciw` (change inner word), `di"` (delete inside quotes)
-- Use marks for quick navigation
-- Use registers to store multiple pieces of text
+- Use count numbers with commands: `5j` (down 5 lines), `3dd` (delete 3 lines), `10p` (paste 10 times)
+- Combine operators and motions: `dap` (delete around paragraph), `yG` (yank to end of file)
+- Leverage text objects: `ciw` (change inner word), `di"` (delete inside quotes), `ca(` (change around parens)
+- Use the dot command (`.`) to repeat your last edit instantly across multiple lines
+- Use `Ctrl + a` and `Ctrl + x` to increment and decrement numbers directly without typing
+- Use `"_d` to delete text without overwriting what you previously copied to the clipboard
+- Use `"0p` to paste what you yanked even if you deleted something in between
+- Use marks (`ma` and `'a`) for jumping between faraway locations in code
+- Use `<leader>sc` or `<leader>?` anytime you forget a key or command
 
 ### Best Practices
-- Stay in normal mode when not typing
-- Use relative line numbers for navigation
-- Learn to use text objects effectively
-- Use macros for repetitive tasks
-- Customize your keymaps for efficiency 
+- Stay in normal mode by default; only enter insert mode when actively typing
+- Use relative line numbers to know the exact count needed for jumps (e.g. `8j`, `12k`)
+- Prefer text objects (`ciw`, `da(`, `yi"`) over manual character selection
+- Keep repetitive operations automated using macros (`qq` ... `q` then `@q`)
+- Keep your configuration modular and use `<leader>rr` to test changes immediately
