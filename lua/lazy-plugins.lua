@@ -16,6 +16,7 @@ require('lazy').setup({
 
   -- load plugins
   require '/plugins/gitsigns',
+  require '/plugins/git',
   require '/plugins/which-key',
   require '/plugins/telescope',
   require '/plugins/lspconfig',

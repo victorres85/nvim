@@ -606,3 +606,10 @@
 - Prefer text objects (`ciw`, `da(`, `yi"`) over manual character selection
 - Keep repetitive operations automated using macros (`qq` ... `q` then `@q`)
 - Keep your configuration modular and use `<leader>rr` to test changes immediately
+## Git (diffview / neogit)
+- `<leader>gd` - Open Diffview (working tree changes, merge conflicts)
+- `<leader>gh` - Diffview history of current file
+- `<leader>gH` - Diffview history of branch
+- `<leader>gq` - Close Diffview
+- `<leader>gg` - Open Neogit (stage, commit, push)
+- `<leader>gc` - Neogit commit
