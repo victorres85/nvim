@@ -32,7 +32,7 @@ Ensure the following tools are installed on your machine before setting up Neovi
 * **Git** (for plugin management)
 * **C Compiler & Make** (`gcc`, `make` — required to compile `telescope-fzf-native` and `LuaSnip` regex support)
 * **ripgrep** (`rg` — required for Telescope live grep)
-* **A [Nerd Font](https://www.nerdfonts.com/)** (e.g., JetBrainsMono Nerd Font, Hack Nerd Font) for editor icons
+* **A [Nerd Font](https://www.nerdfonts.com/)** (e.g., JetBrainsMono Nerd Font, Hack Nerd Font) for editor icons (see [Nerd Font Setup](#-nerd-font-setup-macos))
 
 ### 3. Language Runtimes
 * **Python 3** and **[uv](https://astral.sh/uv)** (recommended for managing Astral tools like `ty` and `ruff`)
@@ -115,6 +115,44 @@ On first launch:
 Wait a few moments for the installations to finish. You can view Mason's status at any time with `:Mason`.
 
 Restart Neovim once the initial installation completes.
+
+---
+
+## 🔤 Nerd Font Setup (macOS)
+
+Icons in NvimTree, Telescope and the statusline need a Nerd Font set in your **terminal** (not in Neovim). Without one you will see `?` or empty boxes.
+
+### 1. Install JetBrainsMono Nerd Font
+
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
+```
+
+*(Without Homebrew: download the zip from [nerdfonts.com](https://www.nerdfonts.com/font-downloads), open the `.ttf` files and click **Install Font** in Font Book.)*
+
+### 2. Configure your terminal
+
+#### iTerm2
+1. Open **Settings** (`⌘,`) → **Profiles** → select your profile → **Text**.
+2. Under **Font**, choose **JetBrainsMono Nerd Font** (the `JetBrainsMono Nerd Font Mono` variant also works).
+3. If **Use a different font for non-ASCII text** is enabled, either disable it or set it to the same Nerd Font.
+
+#### Terminal.app
+1. Open **Settings** (`⌘,`) → **Profiles** → select your profile → **Text**.
+2. Click **Change…** under **Font** and choose **JetBrainsMono Nerd Font**.
+3. Click **Default** to make it the default profile if needed.
+
+### 3. Verify
+
+Restart the terminal and run:
+
+```bash
+echo -e "\uf07b \ue5fe \uf015"
+```
+
+You should see a folder, an open folder and a house icon. If you still see `?`, the font is not applied to the active profile.
+
+> **Tip:** If you use tmux, start it with `tmux -u` to force UTF-8.
 
 ---
 
