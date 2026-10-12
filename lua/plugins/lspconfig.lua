@@ -160,41 +160,28 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      -- Register custom 'ty' and 'biome' LSP configurations if not defined in lspconfig
-      local configs = require 'lspconfig.configs'
-      local util = require 'lspconfig.util'
+      -- Custom 'ty' and 'biome' LSP configurations (native vim.lsp.config, Nvim 0.11+).
+      -- workspace_required = false keeps the old single_file_support behaviour.
+      vim.lsp.config('ty', {
+        cmd = { 'ty', 'server' },
+        filetypes = { 'python' },
+        root_markers = { 'ty.toml', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
+        workspace_required = false,
+      })
 
-      if not configs.ty then
-        configs.ty = {
-          default_config = {
-            cmd = { 'ty', 'server' },
-            filetypes = { 'python' },
-            root_dir = util.root_pattern('ty.toml', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git'),
-            single_file_support = true,
-          },
-        }
-      end
-
-      if not configs.biome then
-        configs.biome = {
-          default_config = {
-            cmd = { 'biome', 'lsp-proxy' },
-            filetypes = {
-              'javascript',
-              'javascriptreact',
-              'typescript',
-              'typescriptreact',
-              'json',
-              'jsonc',
-            },
-            root_dir = function(fname)
-              return util.root_pattern('biome.json', 'biome.jsonc', 'package.json', 'tsconfig.json', 'jsconfig.json', '.git')(fname)
-                or util.path.dirname(fname)
-            end,
-            single_file_support = true,
-          },
-        }
-      end
+      vim.lsp.config('biome', {
+        cmd = { 'biome', 'lsp-proxy' },
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'typescript',
+          'typescriptreact',
+          'json',
+          'jsonc',
+        },
+        root_markers = { 'biome.json', 'biome.jsonc', 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+        workspace_required = false,
+      })
 
       -- Enable only Python, JavaScript/TypeScript, Terraform, and Lua (for Neovim config)
       local servers = {
@@ -250,7 +237,8 @@ return {
 
       for server_name, server in pairs(servers) do
         server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-        require('lspconfig')[server_name].setup(server)
+        vim.lsp.config(server_name, server)
+        vim.lsp.enable(server_name)
       end
     end,
   },

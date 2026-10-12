@@ -10,11 +10,10 @@ return {
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-storm'  -- Change to 'tokyonight-storm' for darker, 'tokyonight-moon' for medium
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-
+      -- Custom fixed-hex port of Claude Code's dark-daltonized theme
+      -- (colors/claude-daltonized.lua). tokyonight stays installed; swap the
+      -- name back to 'tokyonight-storm' to return to it.
+      vim.cmd.colorscheme 'claude-daltonized'
     end,
   },
 }
