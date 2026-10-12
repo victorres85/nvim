@@ -613,3 +613,6 @@
 - `<leader>gq` - Close Diffview
 - `<leader>gg` - Open Neogit (stage, commit, push)
 - `<leader>gc` - Neogit commit
+
+## Markdown
+- `<leader>mp` - Toggle browser preview of the current markdown file (`:MarkdownPreviewToggle`)
