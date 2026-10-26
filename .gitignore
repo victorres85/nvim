@@ -8,3 +8,5 @@ foo.*
 data
 2
 back
+node_modules/
+yarn.lock

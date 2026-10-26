@@ -2,6 +2,10 @@ return {
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
+      -- Per-project LSP settings via `.neoconf.json` (also reads `.vscode/settings.json`).
+      -- NOTE: Must be set up before lspconfig, hence listed as a dependency.
+      { 'folke/neoconf.nvim', opts = {} },
+
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
       'williamboman/mason-lspconfig.nvim',
@@ -201,6 +205,20 @@ return {
 
         -- TypeScript & JavaScript: ts_ls (type checking & symbol navigation)
         ts_ls = {
+          settings = {
+            typescript = {
+              suggest = {
+                autoImports = true,
+                includeCompletionsForModuleExports = true,
+              },
+            },
+            javascript = {
+              suggest = {
+                autoImports = true,
+                includeCompletionsForModuleExports = true,
+              },
+            },
+          },
           on_attach = function(client, _)
             -- Disable formatting so Biome handles formatting exclusively
             client.server_capabilities.documentFormattingProvider = false
@@ -240,6 +258,12 @@ return {
         vim.lsp.config(server_name, server)
         vim.lsp.enable(server_name)
       end
+
+      -- User commands for LSP info and logs (compatibility for Neovim 0.11 / 0.12+)
+      vim.api.nvim_create_user_command('LspInfo', 'checkhealth vim.lsp', { desc = 'LSP info (:checkhealth vim.lsp)' })
+      vim.api.nvim_create_user_command('LspLog', function()
+        vim.cmd('tabnew ' .. vim.lsp.log.get_filename())
+      end, { desc = 'Opens the Nvim LSP client log' })
     end,
   },
 }

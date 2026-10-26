@@ -57,3 +57,8 @@ vim.opt.scrolloff = 10
 -- Netrw settings (hide banner and use tree view by default)
 vim.g.netrw_banner = 0
 -- vim.g.netrw_liststyle = 3
+
+-- Load per-project config from `.nvim.lua` in the current directory.
+-- Neovim prompts to trust the file the first time (and whenever it changes).
+--  See `:help 'exrc'` and `:help :trust`
+vim.o.exrc = true

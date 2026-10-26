@@ -27,7 +27,19 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+vim.keymap.set('n', '<leader>e', function()
+  local line_diags = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+  if #line_diags > 0 then
+    vim.diagnostic.open_float()
+  else
+    local all_diags = vim.diagnostic.get(0)
+    if #all_diags > 0 then
+      vim.notify(string.format('No diagnostics on this line (%d in buffer - press ]d to jump)', #all_diags), vim.log.levels.INFO)
+    else
+      vim.notify('No diagnostics in buffer', vim.log.levels.INFO)
+    end
+  end
+end, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- TIP: Disable arrow keys in normal mode

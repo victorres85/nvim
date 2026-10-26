@@ -19,6 +19,9 @@ require 'lazy-bootstrap'
 -- [[ Configure and install plugins ]]
 require 'lazy-plugins'
 
+-- [[ GitHub PR floating form: :PRCreate / <leader>gp ]]
+require('pr-form').setup()
+
 vim.keymap.set('n', '<leader>rr', function()
   vim.cmd('source ~/.config/nvim/init.lua')
   vim.notify('Configuration reloaded!', vim.log.levels.INFO)
